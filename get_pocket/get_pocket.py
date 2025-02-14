@@ -82,6 +82,8 @@ def preprocessor(docking_result_sdf_fn,origin_recptor_pdb,data_dir):
         os.mkdir(data_dir)
     if os.path.getsize(docking_result_sdf_fn): #docking ligand file may be 0 size
         total=Chem.SDMolSupplier(docking_result_sdf_fn)
+        # m1: chem.sdmolsupplier提取后的ligand
+        # m2: extract后的pocket
         for i,m1 in enumerate(total):
             key=sdf_fn 
             if not os.path.exists(os.path.join(data_dir,key)):

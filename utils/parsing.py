@@ -74,7 +74,7 @@ def parse_train_args():
                             but if idx_style=false, the first 3 poses will be test')
     parser.add_argument('--test_path', type=str, default="./data/sample_data/", \
                         help='test directory which contains the banchmark test data dirs')
-    parser.add_argument('--test_name', type=str, default="tmp_pockets", \
+    parser.add_argument('--test_name', type=str, default="", \
                         help='test dataset directory which contains the test pockets')
     parser.add_argument('--EF_rates', type=list, default=[0.001,0.002,0.005,0.01,0.02,0.05,0.1,0.2,0.5], \
                         help='EF rates for banchmark test')

@@ -1,0 +1,114 @@
+# syntax=docker/dockerfile:1.4
+
+FROM nvidia/cuda:11.8.0-cudnn8-devel-ubuntu20.04
+
+# Set default RUN shell to /bin/bash
+SHELL ["/bin/bash", "-cu"]
+
+
+# Set environment variables
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+
+# Install basic packages for compiling and building
+ENV DEBIAN_FRONTEND=noninteractive
+# change apt source to Tsinghua mirror (optional)
+RUN sed -i 's|http://archive.ubuntu.com/ubuntu/|https://mirrors.tuna.tsinghua.edu.cn/ubuntu/|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.ubuntu.com/ubuntu/|https://mirrors.tuna.tsinghua.edu.cn/ubuntu/|g' /etc/apt/sources.list
+RUN apt-get update && apt-get install -y --allow-downgrades --allow-change-held-packages --no-install-recommends \
+    build-essential \
+    cmake \
+    g++-7 \
+    git \
+    curl \
+    wget \
+    ca-certificates \
+    libjpeg-dev \
+    libpng-dev \
+    librdmacm1 \
+    libibverbs1 \
+    libboost-all-dev \
+    ibverbs-providers \
+    tzdata \
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    fontconfig \
+    # language-pack-en \
+    # sysstat \
+    # gnupg \
+    # lsb-release \
+    # sudo \
+    && rm -rf /var/lib/apt/lists/*
+
+
+
+# Install Miniconda & use Python 3.8
+ARG python=3.8
+ENV PYTHON_VERSION=${python}
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/install-conda.sh \
+    && chmod +x /tmp/install-conda.sh \
+    && bash /tmp/install-conda.sh -b -f -p /usr/local \
+    && rm -f /tmp/install-conda.sh \
+    # && conda install -y python=${PYTHON_VERSION} \
+    && conda clean -y --all
+
+
+# Setup TUNA mirror (optional)
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+RUN mkdir -p ~/.conda && \
+    echo "channels:" > ~/.condarc && \
+    echo "  - defaults" >> ~/.condarc && \
+    echo "show_channel_urls: true" >> ~/.condarc && \
+    echo "channel_alias: https://mirrors.tuna.tsinghua.edu.cn/anaconda" >> ~/.condarc && \
+    echo "default_channels:" >> ~/.condarc && \
+    echo "  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main" >> ~/.condarc && \
+    echo "  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free" >> ~/.condarc && \
+    echo "  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r" >> ~/.condarc && \
+    echo "  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/pro" >> ~/.condarc && \
+    echo "  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2" >> ~/.condarc && \
+    echo "custom_channels:" >> ~/.condarc && \
+    echo "  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud" >> ~/.condarc && \
+    echo "  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud" >> ~/.condarc && \
+    echo "  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud" >> ~/.condarc && \
+    echo "  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud" >> ~/.condarc && \
+    echo "  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud" >> ~/.condarc && \
+    echo "  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud" >> ~/.condarc && \
+    echo "  nvidia: https://mirrors.sustech.edu.cn/anaconda-extra/cloud" >> ~/.condarc && \
+    conda config --set show_channel_urls yes
+
+
+# By default, install packages from `requirements.txt` with pip.
+COPY . /app
+
+RUN mkdir /usr/local/envs/equiscore
+COPY /env /usr/local/envs/equiscore
+# RUN source activate base && \
+#     conda activate equiscore && \
+#     conda-unpack
+
+
+# RUN conda create --name equiscore -c conda-forge python=3.8 -y
+# RUN conda install -n equiscore pytorch==1.11.0 cudatoolkit=11.3 -c pytorch -y
+# RUN conda install -n equiscore -c conda-forge rdkit biopython scikit-learn prolif -y && \
+#     conda clean -y --all
+# RUN conda run -n equiscore pip install prefetch-generator lmdb numpy==1.22.3
+
+
+# RUN wget "https://zenodo.org/records/10417452/files/EquiScore.tar.gz?download=1" -O /app/EquiScore.tar.gz && \
+#     mkdir /usr/local/miniconda3/envs/equiscore && \
+#     tar -xzvf /app/EquiScore.tar.gz -C /usr/local/miniconda3/envs/equiscore && \
+#     rm /app/EquiScore.tar.gz
+
+
+# RUN mkdir /dgl && \
+#     git clone --recurse-submodules --branch 0.9.x https://github.com/dmlc/dgl.git /dgl && \
+#     mkdir /dgl/build && \
+#     cd /dgl/build && \
+#     cmake -DUSE_CUDA = ON .. && \
+#     make -j4 && \
+#     cd ../python && \
+#     python setup.py install
+
+# Set working directory to /project
+WORKDIR "/app"
