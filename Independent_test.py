@@ -33,7 +33,6 @@ def run(local_rank,args,*more_args,**kwargs):
     else:
         args.N_atom_features = 28
     model = EquiScore(args) if args.model == 'EquiScore' else None
-
     args.device = args.local_rank
     best_name = args.save_model
     model_name = best_name.split('/')[-1]

@@ -1,7 +1,7 @@
 #!/bin/bash 
 # copyright by caoduanhua(caodh@zju.edu.cn)
 
-source ~/anaconda3/bin/activate EquiScore
+source ~/miniconda3/bin/activate equiscore
 # export TORCH_DISTRIBUTED_DEBUG=INFO
 
 export CUDA_VISIBLE_DEVICES="0,1,2,3"
