@@ -23,5 +23,5 @@ command=`python Screening.py \
 --test \
 --test_path  /data_lmdb/ \
 --pred_save_path  /data_lmdb/screening_result.csv \
---save_model /checkpoints/save_model_screen.pt`
+--save_model /checkpoints/sava_model_LeadOpt.pt`
 state=$command

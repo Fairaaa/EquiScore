@@ -61,7 +61,7 @@ def initialize_model(model, device, args,load_save_file = False,init_classifer =
         
         optimizer =state_dict['optimizer']
         epoch = state_dict['epoch']
-        print('load save model!')
+        print('load save model from %s'%load_save_file)
     if torch.cuda.device_count() > 1:
         print("Let's use", torch.cuda.device_count(), "GPUs!")
       

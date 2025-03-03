@@ -81,34 +81,11 @@ RUN mkdir -p ~/.conda && \
 # By default, install packages from `requirements.txt` with pip.
 COPY . /app
 
-RUN mkdir /usr/local/envs/equiscore
-COPY /env /usr/local/envs/equiscore
-# RUN source activate base && \
-#     conda activate equiscore && \
-#     conda-unpack
+# RUN mkdir /usr/local/envs/equiscore
+# COPY /env /usr/local/envs/equiscore
 
-
-# RUN conda create --name equiscore -c conda-forge python=3.8 -y
-# RUN conda install -n equiscore pytorch==1.11.0 cudatoolkit=11.3 -c pytorch -y
-# RUN conda install -n equiscore -c conda-forge rdkit biopython scikit-learn prolif -y && \
-#     conda clean -y --all
-# RUN conda run -n equiscore pip install prefetch-generator lmdb numpy==1.22.3
-
-
-# RUN wget "https://zenodo.org/records/10417452/files/EquiScore.tar.gz?download=1" -O /app/EquiScore.tar.gz && \
-#     mkdir /usr/local/miniconda3/envs/equiscore && \
-#     tar -xzvf /app/EquiScore.tar.gz -C /usr/local/miniconda3/envs/equiscore && \
-#     rm /app/EquiScore.tar.gz
-
-
-# RUN mkdir /dgl && \
-#     git clone --recurse-submodules --branch 0.9.x https://github.com/dmlc/dgl.git /dgl && \
-#     mkdir /dgl/build && \
-#     cd /dgl/build && \
-#     cmake -DUSE_CUDA = ON .. && \
-#     make -j4 && \
-#     cd ../python && \
-#     python setup.py install
+RUN mkdir -p /usr/local/envs/equiscore
+RUN tar -xzf /app/EquiScore.tar.gz -C /usr/local/envs/equiscore
 
 # Set working directory to /project
 WORKDIR "/app"
