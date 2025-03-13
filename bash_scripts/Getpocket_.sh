@@ -20,7 +20,7 @@ root_folder="/EquiScore"
 for dir in "$root_folder"/*/; do
     if [ -d "$dir" ]; then
         command=`python get_pocket/get_pocket.py \
-        --single_sdf_save_path "${dir}tmp_sdf" \
+        --single_sdf_save_path "${dir}tmp_sdfs" \
         --recptor_pdb "${dir}protein.pdb" \
         --docking_result "${dir}compounds.sdf" \
         --pocket_save_dir "${dir}tmp_pockets" \
