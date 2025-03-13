@@ -15,6 +15,9 @@ from dataset.dataset import ESDataset
 import pickle
 import pandas as pd
 from model.equiscore import EquiScore
+import logging
+logger = logging.getLogger(__name__)
+
 class DataLoaderX(DataLoader):
     def __iter__(self):
         return BackgroundGenerator(super().__iter__())                            
@@ -39,6 +42,7 @@ def run(local_rank,args,*more_args,**kwargs):
     model = EquiScore(args) if args.model == 'EquiScore' else None
     args.device = args.local_rank
     best_name = args.save_model
+    logger.info(f"best_name: {best_name}")
     model_name = best_name.split('/')[-1]
     save_path = best_name.replace(model_name,'')
     if not os.path.exists(save_path):

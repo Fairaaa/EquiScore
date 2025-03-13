@@ -36,7 +36,7 @@ def parse_train_args():
     parser.add_argument('--lr_decay', action='store_true', default=True, help='lr_decay or not')
     parser.add_argument('--max_lr', type=float, default=0.001, help='max learning rate') 
     parser.add_argument('--pct_start', type=float, default=0.3, help='OneCycleLR parameter')
-    parser.add_argument('--num_workers', type=int, default=8, help='Number of workers for preprocessing')
+    parser.add_argument('--num_workers', type=int, default=2, help='Number of workers for preprocessing')
     # Model
     parser.add_argument('--model', type=str, default='EquiScore', help='model class')
     parser.add_argument('--pred_mode', type=str, default='ligand', help='prediction mode')

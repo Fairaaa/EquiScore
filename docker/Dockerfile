@@ -81,8 +81,6 @@ RUN mkdir -p ~/.conda && \
 # By default, install packages from `requirements.txt` with pip.
 COPY . /app
 
-# RUN mkdir /usr/local/envs/equiscore
-# COPY /env /usr/local/envs/equiscore
 
 RUN mkdir -p /usr/local/envs/equiscore
 RUN tar -xzf /app/EquiScore.tar.gz -C /usr/local/envs/equiscore
